@@ -2,13 +2,20 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
 }
 
 .header {
-  background-color: #3b82f6;
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: #333;
   padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  border-image-slice: 1;
 }
 
 .container {
@@ -21,6 +28,9 @@
   font-size: 1.875rem;
   font-weight: 700;
   margin: 0;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .userActions {
@@ -31,19 +41,21 @@
 }
 
 .button {
-  background-color: white;
-  color: #3b82f6;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  color: white;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .button:hover {
-  background-color: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .main {
@@ -60,10 +72,28 @@
 
 .statCard {
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 1.5rem;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+}
+
+.statCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
 }
 
 .statTitle {
@@ -75,7 +105,9 @@
 .statValue {
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin: 0;
 }
 
@@ -87,19 +119,21 @@
 }
 
 .actionButton {
-  background-color: #3b82f6;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   color: white;
   border: none;
-  border-radius: 0.375rem;
-  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1.5rem;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .actionButton:hover {
-  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .section {
@@ -109,7 +143,9 @@
 .sectionTitle {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 1.5rem;
 }
 
@@ -121,9 +157,27 @@
 
 .problemCard {
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.problemCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+}
+
+.problemCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
 }
 
 .problemTitle {
@@ -171,17 +225,61 @@
 }
 
 .actionButtonSmall {
-  background-color: #f1f5f9;
-  color: #475569;
+  background-color: #f3f0ff;
+  color: #805ad5;
   border: none;
-  border-radius: 0.375rem;
-  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .actionButtonSmall:hover {
-  background-color: #e2e8f0;
+  background-color: #e9d5ff;
+  transform: translateY(-2px);
+}
+
+/* Add a subtle animation to the cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.statCard, .problemCard {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Add some decorative elements */
+.dashboard::after {
+  content: "";
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.dashboard::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0.1;
+  z-index: -1;
 }

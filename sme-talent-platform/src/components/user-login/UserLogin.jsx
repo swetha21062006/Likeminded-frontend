@@ -2,24 +2,12 @@ import React, { useState } from "react";
 import styles from "./UserLogin.module.css";
 
 const UserLogin = ({ onNavigate }) => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would normally authenticate the user
-    console.log("User login:", formData);
-    // Navigate to user dashboard after successful login
+    console.log("Login attempted with:", { email, password: "********" });
     onNavigate("user-dashboard", { userType: "student" });
   };
 
@@ -30,7 +18,6 @@ const UserLogin = ({ onNavigate }) => {
         <p className={styles.subtitle}>
           Access your account to solve real business problems
         </p>
-
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
@@ -39,10 +26,10 @@ const UserLogin = ({ onNavigate }) => {
             <input
               type="email"
               id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className={styles.input}
+              placeholder="Enter your email"
               required
             />
           </div>
@@ -54,10 +41,10 @@ const UserLogin = ({ onNavigate }) => {
             <input
               type="password"
               id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className={styles.input}
+              placeholder="Enter your password"
               required
             />
           </div>
@@ -67,16 +54,26 @@ const UserLogin = ({ onNavigate }) => {
           </button>
         </form>
 
+        <div className={styles.divider}>
+          <span className={styles.dividerText}>OR</span>
+        </div>
+
         <div className={styles.footer}>
           <p>
             Don't have an account?{" "}
-            <a href="#" className={styles.link}>
+            <button
+              className={styles.linkButton}
+              onClick={() => onNavigate("user-signup")}
+            >
               Sign up
-            </a>
+            </button>
           </p>
-          <a href="#" className={styles.link}>
+          <button
+            className={styles.linkButton}
+            onClick={() => onNavigate("forgot-password")}
+          >
             Forgot password?
-          </a>
+          </button>
         </div>
 
         <button

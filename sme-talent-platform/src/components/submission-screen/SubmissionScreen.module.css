@@ -2,12 +2,20 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
 }
 
 .header {
-  background-color: #3b82f6;
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: #333;
   padding: 2rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  border-image-slice: 1;
 }
 
 .container {
@@ -20,11 +28,14 @@
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
   font-size: 1.125rem;
-  opacity: 0.9;
+  color: #64748b;
 }
 
 .main {
@@ -34,10 +45,28 @@
 
 .problemInfo {
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 1.5rem;
   margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.problemInfo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+}
+
+.problemInfo:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
 }
 
 .problemTitle {
@@ -76,10 +105,28 @@
 
 .form {
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 2rem;
   max-width: 800px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+}
+
+.form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
 }
 
 .formGroup {
@@ -89,23 +136,25 @@
 .label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.9rem;
 }
 
 .input, .textarea {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  padding: 0.875rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
   font-size: 1rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
 }
 
 .input:focus, .textarea:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #805ad5;
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.2);
 }
 
 .textarea {
@@ -126,20 +175,20 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  border: 2px dashed #d1d5db;
+  border: 2px dashed #e2e8f0;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .fileLabel:hover {
-  border-color: #3b82f6;
-  background-color: #f8fafc;
+  border-color: #805ad5;
+  background-color: #f3f0ff;
 }
 
 .fileLabel svg {
   margin-bottom: 0.5rem;
-  color: #64748b;
+  color: #805ad5;
 }
 
 .fileLabel span {
@@ -163,8 +212,13 @@
   justify-content: space-between;
   padding: 0.75rem;
   background-color: #f8fafc;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   margin-bottom: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.fileItem:hover {
+  background-color: #f3f0ff;
 }
 
 .fileName {
@@ -175,14 +229,14 @@
 .removeButton {
   background: none;
   border: none;
-  color: #ef4444;
+  color: #f5576c;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.25rem;
   border-radius: 0.25rem;
-  transition: background-color 0.15s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 
 .removeButton:hover {
@@ -198,31 +252,66 @@
 
 .cancelButton {
   background-color: transparent;
-  color: #64748b;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-}
-
-.cancelButton:hover {
-  background-color: #f1f5f9;
-}
-
-.submitButton {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
+  color: #718096;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.cancelButton:hover {
+  background-color: #f7fafc;
+  border-color: #cbd5e0;
+  color: #4a5568;
+}
+
+.submitButton {
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .submitButton:hover {
-  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Add a subtle animation to the cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.problemInfo, .form {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Add some decorative elements */
+.submissionScreen::after {
+  content: "";
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  opacity: 0.1;
+  z-index: -1;
 }

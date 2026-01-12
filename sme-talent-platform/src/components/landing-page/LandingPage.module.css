@@ -2,13 +2,21 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
 }
 
 .header {
-  background-color: #3b82f6;
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: #333;
   padding: 4rem 0;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  border-image-slice: 1;
 }
 
 .container {
@@ -21,10 +29,14 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
   font-size: 1.25rem;
+  color: #64748b;
   margin-bottom: 2rem;
   max-width: 700px;
   margin-left: auto;
@@ -39,31 +51,34 @@
 }
 
 .button {
-  padding: 0.75rem 2rem;
+  padding: 0.875rem 2rem;
   font-size: 1.125rem;
   font-weight: 600;
   border-radius: 0.5rem;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .studentButton {
-  background-color: white;
-  color: #3b82f6;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  color: white;
 }
 
 .studentButton:hover {
-  background-color: #f1f5f9;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .vendorButton {
-  background-color: #1e40af;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 
 .vendorButton:hover {
-  background-color: #1e3a8a;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .main {
@@ -79,29 +94,103 @@
 
 .feature {
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 2rem;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
 }
 
 .feature:hover {
   transform: translateY(-5px);
+  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
 }
 
 .icon {
-  color: #3b82f6;
+  color: #805ad5;
   margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.feature:hover .icon {
+  transform: scale(1.1);
+  color: #f5576c;
 }
 
 .featureTitle {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: #1e293b;
+  transition: all 0.3s ease;
+}
+
+.feature:hover .featureTitle {
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .featureDescription {
   color: #64748b;
   line-height: 1.6;
+  transition: all 0.3s ease;
+}
+
+.feature:hover .featureDescription {
+  color: #4a5568;
+}
+
+/* Add a subtle animation to the cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feature {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Add some decorative elements */
+.landingPage::after {
+  content: "";
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.landingPage::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0.1;
+  z-index: -1;
 }

@@ -2,12 +2,20 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
 }
 
 .header {
-  background-color: #3b82f6;
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: #333;
   padding: 2rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  border-image-slice: 1;
 }
 
 .container {
@@ -20,11 +28,14 @@
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
   font-size: 1.125rem;
-  opacity: 0.9;
+  color: #64748b;
 }
 
 .main {
@@ -40,10 +51,28 @@
 
 .solutionsList {
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 1.5rem;
   height: fit-content;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.solutionsList::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+}
+
+.solutionsList:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
 }
 
 .sectionTitle {
@@ -60,21 +89,23 @@
 }
 
 .solutionCard {
-  border: 1px solid #e2e8f0;
+  border: 2px solid #e2e8f0;
   border-radius: 0.5rem;
   padding: 1rem;
   cursor: pointer;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .solutionCard:hover {
-  border-color: #3b82f6;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-color: #805ad5;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
 }
 
 .solutionCard.selected {
-  border-color: #3b82f6;
-  background-color: #f0f9ff;
+  border-color: #805ad5;
+  background-color: #f3f0ff;
+  box-shadow: 0 10px 15px -3px rgba(128, 90, 213, 0.2), 0 4px 6px -2px rgba(128, 90, 213, 0.1);
 }
 
 .solutionTitle {
@@ -134,9 +165,27 @@
 
 .reviewForm {
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.reviewForm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+}
+
+.reviewForm:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
 }
 
 .solutionInfo {
@@ -166,6 +215,11 @@
   background-color: #f8fafc;
   border-radius: 0.5rem;
   padding: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.contentPreview:hover {
+  background-color: #f3f0ff;
 }
 
 .contentPreview p {
@@ -193,6 +247,14 @@
   gap: 0.5rem;
   color: #64748b;
   font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.attachment:hover {
+  background-color: #f3f0ff;
+  color: #805ad5;
 }
 
 .form {
@@ -206,8 +268,9 @@
 .label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.9rem;
 }
 
 .starRating {
@@ -226,6 +289,7 @@
 
 .star:hover {
   color: #fbbf24;
+  transform: scale(1.1);
 }
 
 .star.active {
@@ -234,18 +298,19 @@
 
 .textarea {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  padding: 0.875rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
   font-size: 1rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
   resize: vertical;
+  box-sizing: border-box;
 }
 
 .textarea:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #805ad5;
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.2);
 }
 
 .formActions {
@@ -256,34 +321,69 @@
 
 .rejectButton {
   background-color: transparent;
-  color: #ef4444;
-  border: 1px solid #fca5a5;
-  border-radius: 0.375rem;
-  padding: 0.75rem 1.5rem;
+  color: #f5576c;
+  border: 2px solid #fca5a5;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1.5rem;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .rejectButton:hover {
   background-color: #fee2e2;
+  border-color: #f5576c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(245, 87, 108, 0.2), 0 4px 6px -2px rgba(245, 87, 108, 0.1);
 }
 
 .approveButton {
-  background-color: #10b981;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   color: white;
   border: none;
-  border-radius: 0.375rem;
-  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1.5rem;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .approveButton:hover {
-  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Add a subtle animation to the cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.solutionsList, .reviewForm {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Add some decorative elements */
+.reviewSolutions::after {
+  content: "";
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  opacity: 0.1;
+  z-index: -1;
 }
 
 @media (max-width: 1024px) {
