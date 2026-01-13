@@ -2,13 +2,29 @@ import React, { useState } from "react";
 import styles from "./UserLogin.module.css";
 import { signInWithGoogle, signInWithGithub } from "../../services/authService";
 
-const UserLogin = ({ onNavigate }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const UserSignup = ({ onNavigate }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login attempted with:", { email, password: "********" });
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    console.log("Signup attempted with:", formData);
+    // Navigate to user dashboard after successful signup
     onNavigate("user-dashboard", { userType: "student" });
   };
   const handleGoogleLogin = async () => {
@@ -34,10 +50,11 @@ const handleGithubLogin = async () => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
-        <h2 className={styles.title}>Student Login</h2>
+        <h2 className={styles.title}>Student Sign Up</h2>
         <p className={styles.subtitle}>
-          Access your account to solve real business problems
+          Create your account to start solving business problems
         </p>
+
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
@@ -46,10 +63,10 @@ const handleGithubLogin = async () => {
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               className={styles.input}
-              placeholder="Enter your email"
               required
             />
           </div>
@@ -61,19 +78,31 @@ const handleGithubLogin = async () => {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               className={styles.input}
-              placeholder="Enter your password"
               required
             />
-            <div className={styles.forgotPassword}>
-              <button className={styles.linkButton} onClick={() => console.log('Forgot password')}>Forgot password?</button>
-            </div>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="confirmPassword" className={styles.label}>
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
           </div>
 
           <button type="submit" className={styles.loginButton}>
-            Login
+            Sign Up
           </button>
         </form>
 
@@ -101,12 +130,12 @@ const handleGithubLogin = async () => {
 
         <div className={styles.footer}>
           <p className={styles.centerText}>
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <button
               className={styles.linkButton}
-              onClick={() => onNavigate("user-signup")}
+              onClick={() => onNavigate("user-login")}
             >
-              Sign up
+              Login
             </button>
           </p>
         </div>
@@ -122,4 +151,4 @@ const handleGithubLogin = async () => {
   );
 };
 
-export default UserLogin;
+export default UserSignup;

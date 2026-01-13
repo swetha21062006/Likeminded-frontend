@@ -1,4 +1,6 @@
 import { api } from "./api";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider, githubProvider } from "../firebase";
 
 class AuthService {
   async login(email, password, userType) {
@@ -62,5 +64,16 @@ class AuthService {
     return user.type;
   }
 }
+// Google sign-in (frontend only)
+export const signInWithGoogle = async () => {
+  const result = await signInWithPopup(auth, googleProvider);
+  return result.user;
+};
+
+// GitHub sign-in (frontend only)
+export const signInWithGithub = async () => {
+  const result = await signInWithPopup(auth, githubProvider);
+  return result.user;
+};
 
 export const authService = new AuthService();

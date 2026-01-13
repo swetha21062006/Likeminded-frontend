@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import LandingPage from "./components/landing-page/LandingPage";
 import UserLogin from "./components/user-login/UserLogin";
+import UserSignup from "./components/user-login/UserSignup";
 import VendorLogin from "./components/vendor-login/VendorLogin";
+import VendorSignup from "./components/vendor-login/VendorSignup";
 import UserDashboard from "./components/user-dashboard/UserDashboard";
 import VendorDashboard from "./components/vendor-dashboard/VendorDashboard";
 import ProblemList from "./components/problem-list/ProblemList";
@@ -28,8 +30,12 @@ export default function App() {
         return <LandingPage onNavigate={navigate} />;
       case "user-login":
         return <UserLogin onNavigate={navigate} />;
+      case "user-signup":
+        return <UserSignup onNavigate={navigate} />;
       case "vendor-login":
         return <VendorLogin onNavigate={navigate} />;
+      case "vendor-signup":
+        return <VendorSignup onNavigate={navigate} />;
       case "user-dashboard":
         return <UserDashboard onNavigate={navigate} />;
       case "vendor-dashboard":

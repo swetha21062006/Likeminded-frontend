@@ -1,21 +1,37 @@
 import React, { useState } from "react";
-import styles from "./UserLogin.module.css";
+import styles from "./VendorLogin.module.css";
 import { signInWithGoogle, signInWithGithub } from "../../services/authService";
 
-const UserLogin = ({ onNavigate }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const VendorSignup = ({ onNavigate }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login attempted with:", { email, password: "********" });
-    onNavigate("user-dashboard", { userType: "student" });
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    console.log("Vendor signup attempted with:", formData);
+    // Navigate to vendor dashboard after successful signup
+    onNavigate("vendor-dashboard", { userType: "vendor" });
   };
   const handleGoogleLogin = async () => {
   try {
     const user = await signInWithGoogle();
     console.log("Logged in user:", user.email);
-    onNavigate("user-dashboard", { userType: "student" });
+   onNavigate("vendor-dashboard", { userType: "vendor" });
   } catch (err) {
     console.error("Google login failed", err);
   }
@@ -25,7 +41,7 @@ const handleGithubLogin = async () => {
   try {
     const user = await signInWithGithub();
     console.log("Logged in user:", user.email);
-    onNavigate("user-dashboard", { userType: "student" });
+   onNavigate("vendor-dashboard", { userType: "vendor" });
   } catch (err) {
     console.error("GitHub login failed", err);
   }
@@ -34,10 +50,11 @@ const handleGithubLogin = async () => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
-        <h2 className={styles.title}>Student Login</h2>
+        <h2 className={styles.title}>Vendor Sign Up</h2>
         <p className={styles.subtitle}>
-          Access your account to solve real business problems
+          Create your account to post business problems
         </p>
+
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
@@ -46,10 +63,10 @@ const handleGithubLogin = async () => {
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               className={styles.input}
-              placeholder="Enter your email"
               required
             />
           </div>
@@ -61,19 +78,31 @@ const handleGithubLogin = async () => {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               className={styles.input}
-              placeholder="Enter your password"
               required
             />
-            <div className={styles.forgotPassword}>
-              <button className={styles.linkButton} onClick={() => console.log('Forgot password')}>Forgot password?</button>
-            </div>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="confirmPassword" className={styles.label}>
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
           </div>
 
           <button type="submit" className={styles.loginButton}>
-            Login
+            Sign Up
           </button>
         </form>
 
@@ -95,18 +124,14 @@ const handleGithubLogin = async () => {
           </button>
         </div>
 
-        <div className={styles.divider}>
-          <span className={styles.dividerText}>OR</span>
-        </div>
-
         <div className={styles.footer}>
           <p className={styles.centerText}>
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <button
               className={styles.linkButton}
-              onClick={() => onNavigate("user-signup")}
+              onClick={() => onNavigate("vendor-login")}
             >
-              Sign up
+              Login
             </button>
           </p>
         </div>
@@ -122,4 +147,4 @@ const handleGithubLogin = async () => {
   );
 };
 
-export default UserLogin;
+export default VendorSignup;
