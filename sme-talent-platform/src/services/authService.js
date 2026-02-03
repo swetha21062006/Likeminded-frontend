@@ -1,5 +1,5 @@
 import { api } from "./api";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "../firebase";
 
 class AuthService {
@@ -31,10 +31,12 @@ class AuthService {
 
   async logout() {
     try {
+      await signOut(auth);
       await api.post("/auth/logout");
     } finally {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      localStorage.removeItem("profile");
     }
   }
 
@@ -62,6 +64,41 @@ class AuthService {
   getUserType() {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     return user.type;
+  }
+
+  // Get Firebase authenticated user
+  getFirebaseAuthStateListener(callback) {
+    return onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        const userProfile = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName || "",
+          photoURL: firebaseUser.photoURL || "",
+          loginProvider: firebaseUser.providerData[0]?.providerId || "email",
+        };
+        callback(userProfile);
+      } else {
+        callback(null);
+      }
+    });
+  }
+
+  // Profile management
+  saveProfile(profile) {
+    localStorage.setItem("profile", JSON.stringify(profile));
+    return profile;
+  }
+
+  getProfile() {
+    const profile = localStorage.getItem("profile");
+    return profile ? JSON.parse(profile) : null;
+  }
+
+  updateProfile(updates) {
+    const currentProfile = this.getProfile() || {};
+    const updatedProfile = { ...currentProfile, ...updates };
+    return this.saveProfile(updatedProfile);
   }
 }
 // Google sign-in (frontend only)

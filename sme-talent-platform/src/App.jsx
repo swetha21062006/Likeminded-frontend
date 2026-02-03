@@ -6,6 +6,7 @@ import VendorLogin from "./components/vendor-login/VendorLogin";
 import VendorSignup from "./components/vendor-login/VendorSignup";
 import UserDashboard from "./components/user-dashboard/UserDashboard";
 import VendorDashboard from "./components/vendor-dashboard/VendorDashboard";
+import VendorProfile from "./components/vendor-profile/VendorProfile";
 import ProblemList from "./components/problem-list/ProblemList";
 import TeamScreen from "./components/team-screen/TeamScreen";
 import SubmissionScreen from "./components/submission-screen/SubmissionScreen";
@@ -40,6 +41,8 @@ export default function App() {
         return <UserDashboard onNavigate={navigate} />;
       case "vendor-dashboard":
         return <VendorDashboard onNavigate={navigate} />;
+      case "vendor-profile":
+        return <VendorProfile onNavigate={navigate} />;
       case "problem-list":
         return <ProblemList onNavigate={navigate} />;
       case "team":

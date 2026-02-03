@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase";
 import styles from "./VendorDashboard.module.css";
 
 const VendorDashboard = ({ onNavigate }) => {
+  const [currentVendor, setCurrentVendor] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentVendor(user);
+      } else {
+        setCurrentVendor(null);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleLogout = () => {
+    auth.signOut().then(() => {
+      onNavigate("landing");
+    });
+  };
+
+  const handleProfileClick = () => {
+    onNavigate("vendor-profile");
+  };
+
   const mockProblems = [
     {
       id: 1,
@@ -31,6 +57,24 @@ const VendorDashboard = ({ onNavigate }) => {
     onNavigate("review-solutions");
   };
 
+  // Dashboard welcome section with vendor name only
+  const getDashboardWelcome = () => {
+    if (!currentVendor) {
+      return <p className={styles.loadingText}>Loading vendor information...</p>;
+    }
+
+    return (
+      <div className={styles.welcomeSection}>
+        <h2 className={styles.welcomeTitle}>
+          Welcome, {currentVendor.displayName || currentVendor.email}
+        </h2>
+        <button className={styles.profileButton} onClick={handleProfileClick}>
+          View Profile
+        </button>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.dashboard}>
       <header className={styles.header}>
@@ -39,7 +83,7 @@ const VendorDashboard = ({ onNavigate }) => {
           <div className={styles.userActions}>
             <button
               className={styles.button}
-              onClick={() => onNavigate("landing")}
+              onClick={handleLogout}
             >
               Logout
             </button>
@@ -49,6 +93,8 @@ const VendorDashboard = ({ onNavigate }) => {
 
       <main className={styles.main}>
         <div className={styles.container}>
+          {getDashboardWelcome()}
+
           <div className={styles.stats}>
             <div className={styles.statCard}>
               <h3 className={styles.statTitle}>Posted Problems</h3>
