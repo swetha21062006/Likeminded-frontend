@@ -1,14 +1,33 @@
 import React, { useState } from "react";
 import styles from "./PostProblem.module.css";
 
+const CATEGORIES = [
+  "Marketing",
+  "Web Design",
+  "App Development",
+  "Graphic Design",
+  "Business Strategy",
+  "Data Analysis",
+  "Other",
+];
+
 const PostProblem = ({ onNavigate }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [difficulty, setDifficulty] = useState("");
-  const [deadline, setDeadline] = useState("");
-  const [reward, setReward] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    difficulty: "",
+    deadline: "",
+    reward: "",
+  });
   const [files, setFiles] = useState([]);
+  const [error, setError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -21,91 +40,128 @@ const PostProblem = ({ onNavigate }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, this would post the problem
-    console.log("Posting problem:", {
-      title,
-      description,
-      category,
-      difficulty,
-      deadline,
-      reward,
-      files,
-    });
-    onNavigate("vendor-dashboard");
+    setError("");
+    if (Number(formData.reward) <= 0) {
+      setError("Reward must be greater than 0.");
+      return;
+    }
+    console.log("Posting problem:", { ...formData, files });
+    setSubmitted(true);
+    setTimeout(() => onNavigate("vendor-dashboard"), 1800);
   };
+
+  if (submitted) {
+    return (
+      <div className={styles.postProblem}>
+        <div className={styles.successWrap}>
+          <div className={styles.successIcon}>✓</div>
+          <h2 className={styles.successTitle}>Problem Posted!</h2>
+          <p className={styles.successMsg}>Redirecting to dashboard…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.postProblem}>
-      <header className={styles.header}>
-        <div className={styles.container}>
-          <h1 className={styles.title}>Post a Problem</h1>
-          <p className={styles.subtitle}>
-            Share your business challenge to get innovative solutions
-          </p>
+      {/* Fixed Navbar */}
+      <nav className={styles.navbar}>
+        <div className={styles.navInner}>
+          <span className={styles.navLogo}>SME Platform</span>
+          <ul className={styles.navLinks}>
+            <li onClick={() => onNavigate("vendor-dashboard")}>Dashboard</li>
+            <li className={styles.navActive}>Post Problem</li>
+            <li onClick={() => onNavigate("review-solutions")}>
+              Review Solutions
+            </li>
+            <li
+              className={styles.navLogout}
+              onClick={() => onNavigate("landing")}
+            >
+              Logout
+            </li>
+          </ul>
         </div>
-      </header>
+      </nav>
 
       <main className={styles.main}>
         <div className={styles.container}>
           <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.formHeader}>
+              <h2 className={styles.formTitle}>Post a New Problem</h2>
+              <p className={styles.formSubtitle}>
+                Fill in the details below to attract the right student talent
+              </p>
+            </div>
+
+            {error && <p className={styles.errorText}>{error}</p>}
+
+            {/* Title */}
             <div className={styles.formGroup}>
               <label htmlFor="title" className={styles.label}>
-                Problem Title
+                Problem Title *
               </label>
               <input
                 type="text"
                 id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
                 className={styles.input}
+                placeholder="e.g. Marketing Strategy for Local Cafe"
                 required
               />
             </div>
 
+            {/* Description */}
             <div className={styles.formGroup}>
               <label htmlFor="description" className={styles.label}>
-                Problem Description
+                Problem Description *
               </label>
               <textarea
                 id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
                 className={styles.textarea}
                 rows={6}
+                placeholder="Describe the problem in detail. What do you need? What is the expected outcome? Any constraints or requirements?"
                 required
               />
             </div>
 
+            {/* Category + Difficulty */}
             <div className={styles.formRow}>
               <div className={styles.formGroup}>
                 <label htmlFor="category" className={styles.label}>
-                  Category
+                  Category *
                 </label>
                 <select
                   id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
                   className={styles.select}
                   required
                 >
                   <option value="">Select a category</option>
-                  <option value="Marketing">Marketing</option>
-                  <option value="Web Design">Web Design</option>
-                  <option value="App Development">App Development</option>
-                  <option value="Graphic Design">Graphic Design</option>
-                  <option value="Business Strategy">Business Strategy</option>
-                  <option value="Other">Other</option>
+                  {CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="difficulty" className={styles.label}>
-                  Difficulty
+                  Difficulty *
                 </label>
                 <select
                   id="difficulty"
-                  value={difficulty}
-                  onChange={(e) => setDifficulty(e.target.value)}
+                  name="difficulty"
+                  value={formData.difficulty}
+                  onChange={handleChange}
                   className={styles.select}
                   required
                 >
@@ -117,111 +173,105 @@ const PostProblem = ({ onNavigate }) => {
               </div>
             </div>
 
+            {/* Deadline + Reward */}
             <div className={styles.formRow}>
               <div className={styles.formGroup}>
                 <label htmlFor="deadline" className={styles.label}>
-                  Deadline
+                  Deadline *
                 </label>
                 <input
                   type="date"
                   id="deadline"
-                  value={deadline}
-                  onChange={(e) => setDeadline(e.target.value)}
+                  name="deadline"
+                  value={formData.deadline}
+                  onChange={handleChange}
                   className={styles.input}
+                  min={new Date().toISOString().split("T")[0]}
                   required
                 />
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="reward" className={styles.label}>
-                  Reward ($)
+                  Reward (USD) *
                 </label>
-                <input
-                  type="number"
-                  id="reward"
-                  value={reward}
-                  onChange={(e) => setReward(e.target.value)}
-                  className={styles.input}
-                  min="0"
-                  step="0.01"
-                  required
-                />
+                <div className={styles.inputPrefix}>
+                  <span className={styles.prefix}>$</span>
+                  <input
+                    type="number"
+                    id="reward"
+                    name="reward"
+                    value={formData.reward}
+                    onChange={handleChange}
+                    className={`${styles.input} ${styles.inputWithPrefix}`}
+                    min="1"
+                    step="1"
+                    placeholder="500"
+                    required
+                  />
+                </div>
               </div>
             </div>
 
+            {/* Attachments */}
             <div className={styles.formGroup}>
-              <label htmlFor="files" className={styles.label}>
-                Attachments
-              </label>
-              <div className={styles.fileUpload}>
+              <label className={styles.label}>Attachments (optional)</label>
+              <div className={styles.dropZone}>
                 <input
                   type="file"
                   id="files"
                   onChange={handleFileChange}
-                  className={styles.fileInput}
                   multiple
+                  className={styles.fileInput}
                 />
-                <label htmlFor="files" className={styles.fileLabel}>
+                <label htmlFor="files" className={styles.dropLabel}>
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="28"
+                    height="28"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    strokeWidth="1.5"
                   >
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
-                  <span>Click to upload or drag and drop</span>
-                  <p>PNG, JPG, PDF up to 10MB</p>
+                  <span className={styles.dropText}>Click to upload files</span>
+                  <span className={styles.dropHint}>
+                    PDF, DOC, PNG, JPG up to 10 MB
+                  </span>
                 </label>
               </div>
 
               {files.length > 0 && (
-                <div className={styles.fileList}>
-                  {files.map((file, index) => (
-                    <div key={index} className={styles.fileItem}>
+                <ul className={styles.fileList}>
+                  {files.map((file, i) => (
+                    <li key={i} className={styles.fileItem}>
                       <span className={styles.fileName}>{file.name}</span>
                       <button
                         type="button"
-                        className={styles.removeButton}
-                        onClick={() => removeFile(index)}
+                        onClick={() => removeFile(i)}
+                        className={styles.removeBtn}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <line x1="18" y1="6" x2="6" y2="18"></line>
-                          <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
+                        ✕
                       </button>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
 
+            {/* Actions */}
             <div className={styles.formActions}>
               <button
                 type="button"
-                className={styles.cancelButton}
+                className={styles.cancelBtn}
                 onClick={() => onNavigate("vendor-dashboard")}
               >
                 Cancel
               </button>
-              <button type="submit" className={styles.submitButton}>
+              <button type="submit" className={styles.submitBtn}>
                 Post Problem
               </button>
             </div>

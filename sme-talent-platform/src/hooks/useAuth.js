@@ -1,33 +1,40 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { authService } from "../services/authService";
 
 export const useAuth = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => authService.getStoredUser()); // instant hydrate
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Verify stored token against backend on mount
   useEffect(() => {
-    // Check if user is logged in on app load
-    const checkAuthStatus = async () => {
+    let cancelled = false;
+    const verify = async () => {
       try {
         const currentUser = await authService.getCurrentUser();
-        setUser(currentUser);
-      } catch (err) {
-        setError(err.message);
+        if (!cancelled) setUser(currentUser);
+      } catch {
+        if (!cancelled) setUser(null);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
-
-    checkAuthStatus();
+    verify();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const login = async (email, password, userType) => {
+  const login = useCallback(async (email, password, userType, remember) => {
     setLoading(true);
     setError(null);
-
     try {
-      const userData = await authService.login(email, password, userType);
+      const userData = await authService.login(
+        email,
+        password,
+        userType,
+        remember,
+      );
       setUser(userData);
       return userData;
     } catch (err) {
@@ -36,25 +43,11 @@ export const useAuth = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const logout = async () => {
-    setLoading(true);
-
-    try {
-      await authService.logout();
-      setUser(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const register = async (userData) => {
+  const register = useCallback(async (userData) => {
     setLoading(true);
     setError(null);
-
     try {
       const newUser = await authService.register(userData);
       setUser(newUser);
@@ -65,14 +58,30 @@ export const useAuth = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  const logout = useCallback(async () => {
+    setLoading(true);
+    try {
+      await authService.logout();
+      setUser(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const clearError = useCallback(() => setError(null), []);
 
   return {
     user,
     loading,
     error,
+    isAuthenticated: !!user,
     login,
     logout,
     register,
+    clearError,
   };
 };

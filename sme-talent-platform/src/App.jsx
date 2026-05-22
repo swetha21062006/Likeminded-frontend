@@ -6,8 +6,6 @@ import VendorLogin from "./components/vendor-login/VendorLogin";
 import VendorSignup from "./components/vendor-login/VendorSignup";
 import UserDashboard from "./components/user-dashboard/UserDashboard";
 import VendorDashboard from "./components/vendor-dashboard/VendorDashboard";
-import VendorProfile from "./components/vendor-profile/VendorProfile";
-import ProblemList from "./components/problem-list/ProblemList";
 import TeamScreen from "./components/team-screen/TeamScreen";
 import SubmissionScreen from "./components/submission-screen/SubmissionScreen";
 import PostProblem from "./components/post-problem/PostProblem";
@@ -19,9 +17,12 @@ export default function App() {
   const [state, setState] = useState({
     screen: "landing",
     userType: null,
+    selectedProblem: null,
+    selectedSolution: null,
+    currentUser: null, // { email, displayName, uid }
   });
 
-  const navigate = (screen, data) => {
+  const navigate = (screen, data = {}) => {
     setState((prev) => ({ ...prev, screen, ...data }));
   };
 
@@ -38,13 +39,19 @@ export default function App() {
       case "vendor-signup":
         return <VendorSignup onNavigate={navigate} />;
       case "user-dashboard":
-        return <UserDashboard onNavigate={navigate} />;
+        return (
+          <UserDashboard
+            onNavigate={navigate}
+            currentUser={state.currentUser}
+          />
+        );
       case "vendor-dashboard":
-        return <VendorDashboard onNavigate={navigate} />;
-      case "vendor-profile":
-        return <VendorProfile onNavigate={navigate} />;
-      case "problem-list":
-        return <ProblemList onNavigate={navigate} />;
+        return (
+          <VendorDashboard
+            onNavigate={navigate}
+            currentUser={state.currentUser}
+          />
+        );
       case "team":
         return <TeamScreen onNavigate={navigate} />;
       case "submission":
@@ -70,5 +77,5 @@ export default function App() {
     }
   };
 
-  return <div className="min-h-screen bg-gray-50">{renderScreen()}</div>;
+  return <div>{renderScreen()}</div>;
 }

@@ -1,265 +1,204 @@
-.paymentFeedback {
+.screen {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: relative;
-  overflow: hidden;
 }
 
+/* ── Header ── */
 .header {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255,255,255,0.97);
   backdrop-filter: blur(10px);
-  color: #333;
-  padding: 2rem 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem 0;
   border-bottom: 3px solid transparent;
   border-image: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   border-image-slice: 1;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
-.container {
-  max-width: 800px;
+.headerInner {
+  max-width: 760px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
   margin: 0;
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.main {
-  flex: 1;
-  padding: 2rem 0;
-  display: flex;
-  justify-content: center;
+/* ── Main ── */
+.main { flex: 1; padding: 2.5rem 0; }
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-.confirmationCard {
-  background-color: white;
+/* ── Card ── */
+.card {
+  background: white;
   border-radius: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  padding: 2rem;
-  width: 100%;
+  padding: 2.5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  animation: fadeInUp 0.4s ease-out;
 }
-
-.confirmationCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
+.card::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 5px;
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
 }
 
-.confirmationCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
-}
-
-.iconContainer {
-  margin-bottom: 1.5rem;
+/* ── Success ── */
+.iconWrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
+  width: 80px; height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  margin-bottom: 1.25rem;
+  box-shadow: 0 8px 24px rgba(16,185,129,0.25);
 }
 
-.confirmationTitle {
-  font-size: 1.875rem;
-  font-weight: 700;
+.successTitle {
+  font-size: 1.75rem;
+  font-weight: 800;
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
+  background-clip: text;
+  margin: 0 0 0.5rem;
 }
 
-.confirmationMessage {
-  font-size: 1.125rem;
+.successMsg {
+  font-size: 1rem;
   color: #64748b;
-  margin-bottom: 2rem;
+  margin: 0 0 2rem;
 }
 
-.paymentDetails {
-  background-color: #f8fafc;
-  border-radius: 0.5rem;
+/* ── Details box ── */
+.detailsBox {
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  transition: background 0.2s;
+}
+.detailsBox:hover { background: #f5f3ff; }
+
+.boxTitle {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
+.detailsList { display: flex; flex-direction: column; gap: 0; margin: 0; }
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+.detailRow:last-child { border-bottom: none; }
+
+.detailLabel { font-size: 0.875rem; font-weight: 500; color: #64748b; }
+.detailValue { font-size: 0.875rem; font-weight: 700; color: #1e293b; text-align: right; word-break: break-all; }
+
+/* ── Next steps ── */
+.nextSteps {
+  background: #f8fafc;
+  border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 2rem;
   text-align: left;
-  transition: all 0.2s ease-in-out;
 }
 
-.paymentDetails:hover {
-  background-color: #f3f0ff;
-}
+.stepsList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
 
-.detailsTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.detailsList {
+.stepItem {
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
   gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.5;
 }
 
-.detailItem {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #e2e8f0;
-  transition: all 0.2s ease-in-out;
-}
-
-.detailItem:last-child {
-  border-bottom: none;
-}
-
-.detailItem:hover {
-  padding-left: 0.5rem;
-  background-color: rgba(128, 90, 213, 0.05);
-  margin: 0 -0.5rem;
-  padding-right: 0.5rem;
-}
-
-.detailLabel {
-  font-weight: 500;
-  color: #64748b;
-}
-
-.detailValue {
-  font-weight: 600;
-  color: #1e293b;
-}
-
-.nextSteps {
-  margin-bottom: 2rem;
-  text-align: left;
-}
-
-.stepsTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.stepsList {
-  padding-left: 1.5rem;
-  color: #64748b;
-}
-
-.stepsList li {
-  margin-bottom: 0.5rem;
-  position: relative;
-  transition: all 0.2s ease-in-out;
-}
-
-.stepsList li:hover {
-  color: #805ad5;
-  transform: translateX(5px);
-}
-
-.actions {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.downloadButton, .dashboardButton {
-  display: flex;
+.stepDot {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
 }
 
-.downloadButton {
+/* ── Actions ── */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   color: white;
   border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(245,87,108,0.3);
 }
+.downloadBtn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(245,87,108,0.4); }
 
-.downloadButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.dashboardButton {
-  background-color: transparent;
-  color: #718096;
+.dashboardBtn {
+  background: transparent;
+  color: #64748b;
   border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
+.dashboardBtn:hover { background: #f8fafc; border-color: #cbd5e0; color: #374151; transform: translateY(-2px); }
 
-.dashboardButton:hover {
-  background-color: #f7fafc;
-  border-color: #cbd5e0;
-  color: #4a5568;
-  transform: translateY(-2px);
-}
-
-/* Add a subtle animation to the card */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.confirmationCard {
-  animation: fadeInUp 0.5s ease-out;
-}
-
-/* Add some decorative elements */
-.paymentFeedback::after {
-  content: "";
-  position: absolute;
-  bottom: -100px;
-  right: -100px;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  opacity: 0.1;
-  z-index: -1;
-}
-
-@media (min-width: 640px) {
-  .actions {
-    flex-direction: row;
-    justify-content: center;
-  }
-  
-  .downloadButton, .dashboardButton {
-    width: auto;
-  }
+@media (max-width: 480px) {
+  .card { padding: 1.5rem; }
+  .actions { flex-direction: column; }
+  .downloadBtn, .dashboardBtn { width: 100%; justify-content: center; }
 }

@@ -1,242 +1,256 @@
 import React, { useState } from "react";
 import styles from "./ReviewSolutions.module.css";
 
+const MOCK_SOLUTIONS = [
+  {
+    id: 1,
+    problemTitle: "Marketing Strategy for Local Cafe",
+    teamName: "Marketing Mavericks",
+    submittedDate: "2023-11-20",
+    status: "Pending Review",
+    preview:
+      "Our strategy focuses on hyper-local social media targeting combined with a loyalty program to drive repeat visits. We propose a 3-phase rollout: brand awareness, engagement, then conversion.",
+    attachments: ["Marketing_Strategy.pdf", "Social_Media_Calendar.xlsx"],
+  },
+  {
+    id: 2,
+    problemTitle: "Website Redesign for Small Business",
+    teamName: "Design Dynamos",
+    submittedDate: "2023-11-18",
+    status: "Pending Review",
+    preview:
+      "We redesigned the website with a mobile-first approach, improved navigation, and a streamlined checkout flow. Load time reduced by 40% through image optimisation and lazy loading.",
+    attachments: ["Wireframes_v2.pdf", "Design_System.figma"],
+  },
+  {
+    id: 3,
+    problemTitle: "Social Media Campaign for New Product",
+    teamName: "Creative Minds",
+    submittedDate: "2023-11-15",
+    status: "Approved",
+    preview:
+      "A 30-day influencer-led campaign across Instagram and TikTok, targeting 18-35 year olds. Projected reach of 500k+ impressions in the first week.",
+    attachments: ["Campaign_Brief.pdf", "Content_Plan.docx"],
+  },
+];
+
+const StatusBadge = ({ status }) => {
+  const cls =
+    status === "Approved"
+      ? styles.approved
+      : status === "Rejected"
+        ? styles.rejected
+        : styles.pending;
+  return <span className={`${styles.statusBadge} ${cls}`}>{status}</span>;
+};
+
+const StarRating = ({ value, onChange }) => (
+  <div className={styles.stars}>
+    {[1, 2, 3, 4, 5].map((star) => (
+      <button
+        key={star}
+        type="button"
+        className={`${styles.star} ${star <= value ? styles.starActive : ""}`}
+        onClick={() => onChange(star)}
+        aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
+      >
+        ★
+      </button>
+    ))}
+  </div>
+);
+
 const ReviewSolutions = ({ onNavigate }) => {
-  const [selectedSolution, setSelectedSolution] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [solutions, setSolutions] = useState(MOCK_SOLUTIONS);
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0);
+  const [formError, setFormError] = useState("");
 
-  const mockSolutions = [
-    {
-      id: 1,
-      problemTitle: "Marketing Strategy for Local Cafe",
-      teamName: "Marketing Mavericks",
-      submittedDate: "2023-11-20",
-      status: "Pending Review",
-      rating: 0,
-    },
-    {
-      id: 2,
-      problemTitle: "Website Redesign for Small Business",
-      teamName: "Design Dynamos",
-      submittedDate: "2023-11-18",
-      status: "Pending Review",
-      rating: 0,
-    },
-    {
-      id: 3,
-      problemTitle: "Social Media Campaign for New Product",
-      teamName: "Creative Minds",
-      submittedDate: "2023-11-15",
-      status: "Approved",
-      rating: 5,
-    },
-  ];
-
-  const handleSelectSolution = (solution) => {
-    setSelectedSolution(solution);
+  const handleSelect = (sol) => {
+    setSelected(sol);
     setFeedback("");
     setRating(0);
+    setFormError("");
   };
 
-  const handleSubmitReview = (e) => {
+  const handleApprove = (e) => {
     e.preventDefault();
-    // In a real app, this would submit the review
-    console.log("Submitting review:", {
-      solutionId: selectedSolution.id,
-      feedback,
-      rating,
-    });
+    setFormError("");
+    if (rating === 0) {
+      setFormError("Please give a star rating.");
+      return;
+    }
+    if (!feedback.trim()) {
+      setFormError("Please provide feedback before approving.");
+      return;
+    }
 
-    // Navigate to payment feedback
-    onNavigate("payment-feedback", { selectedSolution });
+    setSolutions((prev) =>
+      prev.map((s) =>
+        s.id === selected.id ? { ...s, status: "Approved" } : s,
+      ),
+    );
+    onNavigate("payment-feedback", { selectedSolution: selected });
   };
 
-  const renderStars = () => {
-    return (
-      <div className={styles.starRating}>
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            className={`${styles.star} ${star <= rating ? styles.active : ""}`}
-            onClick={() => setRating(star)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-            </svg>
-          </button>
-        ))}
-      </div>
+  const handleReject = () => {
+    if (!feedback.trim()) {
+      setFormError("Please provide feedback before rejecting.");
+      return;
+    }
+    setSolutions((prev) =>
+      prev.map((s) =>
+        s.id === selected.id ? { ...s, status: "Rejected" } : s,
+      ),
     );
+    setSelected(null);
   };
 
   return (
-    <div className={styles.reviewSolutions}>
+    <div className={styles.screen}>
       <header className={styles.header}>
-        <div className={styles.container}>
-          <h1 className={styles.title}>Review Solutions</h1>
-          <p className={styles.subtitle}>
-            Evaluate and provide feedback on submitted solutions
-          </p>
+        <div className={styles.headerInner}>
+          <div>
+            <h1 className={styles.title}>Review Solutions</h1>
+            <p className={styles.subtitle}>
+              Evaluate and provide feedback on student submissions
+            </p>
+          </div>
+          <button
+            className={styles.backBtn}
+            onClick={() => onNavigate("vendor-dashboard")}
+          >
+            ← Dashboard
+          </button>
         </div>
       </header>
 
       <main className={styles.main}>
         <div className={styles.container}>
-          <div className={styles.content}>
-            <div className={styles.solutionsList}>
-              <h2 className={styles.sectionTitle}>Submitted Solutions</h2>
-              <div className={styles.solutions}>
-                {mockSolutions.map((solution) => (
+          <div className={styles.layout}>
+            {/* ── Left: solution list ── */}
+            <aside className={styles.sidebar}>
+              <h2 className={styles.sideTitle}>
+                Submissions
+                <span className={styles.count}>{solutions.length}</span>
+              </h2>
+              <div className={styles.solutionList}>
+                {solutions.map((sol) => (
                   <div
-                    key={solution.id}
-                    className={`${styles.solutionCard} ${
-                      selectedSolution?.id === solution.id
-                        ? styles.selected
-                        : ""
-                    }`}
-                    onClick={() => handleSelectSolution(solution)}
+                    key={sol.id}
+                    className={`${styles.solutionCard} ${selected?.id === sol.id ? styles.solutionSelected : ""}`}
+                    onClick={() => handleSelect(sol)}
                   >
-                    <h3 className={styles.solutionTitle}>
-                      {solution.problemTitle}
-                    </h3>
-                    <div className={styles.solutionDetails}>
-                      <div className={styles.solutionDetail}>
-                        <span className={styles.detailLabel}>Team:</span>
-                        <span className={styles.detailValue}>
-                          {solution.teamName}
-                        </span>
-                      </div>
-                      <div className={styles.solutionDetail}>
-                        <span className={styles.detailLabel}>Submitted:</span>
-                        <span className={styles.detailValue}>
-                          {solution.submittedDate}
-                        </span>
-                      </div>
+                    <h3 className={styles.solTitle}>{sol.problemTitle}</h3>
+                    <div className={styles.solMeta}>
+                      <span>👥 {sol.teamName}</span>
+                      <span>📅 {sol.submittedDate}</span>
                     </div>
-                    <div
-                      className={`${styles.status} ${
-                        styles[solution.status.toLowerCase().replace(" ", "-")]
-                      }`}
-                    >
-                      {solution.status}
-                    </div>
+                    <StatusBadge status={sol.status} />
                   </div>
                 ))}
               </div>
-            </div>
+            </aside>
 
-            {selectedSolution && (
-              <div className={styles.reviewForm}>
-                <h2 className={styles.sectionTitle}>Review Solution</h2>
-                <div className={styles.solutionInfo}>
-                  <h3 className={styles.solutionTitle}>
-                    {selectedSolution.problemTitle}
-                  </h3>
-                  <p className={styles.solutionTeam}>
-                    By: {selectedSolution.teamName}
-                  </p>
+            {/* ── Right: review panel ── */}
+            <section className={styles.reviewPanel}>
+              {!selected ? (
+                <div className={styles.emptyState}>
+                  <div className={styles.emptyIcon}>📋</div>
+                  <h3>Select a submission</h3>
+                  <p>Click a submission on the left to review it</p>
                 </div>
+              ) : (
+                <>
+                  <div className={styles.reviewHeader}>
+                    <div>
+                      <h2 className={styles.reviewTitle}>
+                        {selected.problemTitle}
+                      </h2>
+                      <p className={styles.reviewTeam}>
+                        By {selected.teamName} · Submitted{" "}
+                        {selected.submittedDate}
+                      </p>
+                    </div>
+                    <StatusBadge status={selected.status} />
+                  </div>
 
-                <div className={styles.solutionContent}>
-                  <h4 className={styles.contentTitle}>Solution Content</h4>
-                  <div className={styles.contentPreview}>
-                    <p>
-                      This is a preview of the submitted solution. In a real
-                      application, this would display the actual solution
-                      content, including any attached files, images, or links.
-                    </p>
-                    <div className={styles.attachments}>
-                      <h5>Attachments:</h5>
-                      <div className={styles.attachmentList}>
-                        <div className={styles.attachment}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                          </svg>
-                          <span>Marketing_Strategy.pdf</span>
+                  {/* Solution preview */}
+                  <div className={styles.previewBox}>
+                    <h4 className={styles.boxTitle}>Solution Overview</h4>
+                    <p className={styles.previewText}>{selected.preview}</p>
+
+                    <h5 className={styles.attachHeading}>Attachments</h5>
+                    <div className={styles.attachList}>
+                      {selected.attachments.map((a) => (
+                        <div key={a} className={styles.attachItem}>
+                          <span className={styles.attachIcon}>📄</span>
+                          <span className={styles.attachName}>{a}</span>
+                          <button className={styles.downloadBtn}>
+                            Download
+                          </button>
                         </div>
-                        <div className={styles.attachment}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                          </svg>
-                          <span>Social_Media_Plan.docx</span>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
-                </div>
 
-                <form className={styles.form} onSubmit={handleSubmitReview}>
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>Rating</label>
-                    {renderStars()}
-                  </div>
+                  {/* Review form */}
+                  {selected.status === "Pending Review" && (
+                    <form
+                      className={styles.reviewForm}
+                      onSubmit={handleApprove}
+                    >
+                      <div className={styles.formGroup}>
+                        <label className={styles.label}>Rating *</label>
+                        <StarRating value={rating} onChange={setRating} />
+                      </div>
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="feedback" className={styles.label}>
-                      Feedback
-                    </label>
-                    <textarea
-                      id="feedback"
-                      value={feedback}
-                      onChange={(e) => setFeedback(e.target.value)}
-                      className={styles.textarea}
-                      rows={5}
-                      placeholder="Provide detailed feedback on the solution..."
-                      required
-                    />
-                  </div>
+                      <div className={styles.formGroup}>
+                        <label htmlFor="feedback" className={styles.label}>
+                          Feedback *
+                        </label>
+                        <textarea
+                          id="feedback"
+                          value={feedback}
+                          onChange={(e) => setFeedback(e.target.value)}
+                          className={styles.textarea}
+                          rows={5}
+                          placeholder="Provide detailed, constructive feedback on the solution…"
+                        />
+                      </div>
 
-                  <div className={styles.formActions}>
-                    <button type="button" className={styles.rejectButton}>
-                      Reject Solution
-                    </button>
-                    <button type="submit" className={styles.approveButton}>
-                      Approve & Pay
-                    </button>
-                  </div>
-                </form>
-              </div>
-            )}
+                      {formError && (
+                        <p className={styles.errorText}>{formError}</p>
+                      )}
+
+                      <div className={styles.formActions}>
+                        <button
+                          type="button"
+                          className={styles.rejectBtn}
+                          onClick={handleReject}
+                        >
+                          Reject Solution
+                        </button>
+                        <button type="submit" className={styles.approveBtn}>
+                          Approve &amp; Pay
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                  {selected.status !== "Pending Review" && (
+                    <div className={styles.alreadyReviewed}>
+                      <span>
+                        {selected.status === "Approved" ? "✅" : "❌"} This
+                        solution has been{" "}
+                        <strong>{selected.status.toLowerCase()}</strong>.
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
+            </section>
           </div>
         </div>
       </main>

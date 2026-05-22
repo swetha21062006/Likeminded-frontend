@@ -10,6 +10,7 @@ class ApiService {
     const url = `${this.baseURL}${endpoint}`;
 
     const config = {
+      credentials: "include", // ✅ sends HttpOnly cookie on every request
       headers: {
         "Content-Type": "application/json",
         ...options.headers,
@@ -17,8 +18,9 @@ class ApiService {
       ...options,
     };
 
-    // Add auth token if available
-    const token = localStorage.getItem("token");
+    // Also send Bearer token from localStorage as fallback
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,13 +29,13 @@ class ApiService {
       const response = await fetch(url, config);
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({}));
         throw new Error(error.message || "Something went wrong");
       }
 
       return await response.json();
     } catch (error) {
-      console.error("API Error:", error);
+      console.error(`API Error [${endpoint}]:`, error.message);
       throw error;
     }
   }
@@ -63,24 +65,19 @@ class ApiService {
   }
 
   upload(endpoint, formData, options = {}) {
-    const config = {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    return fetch(`${this.baseURL}${endpoint}`, {
       method: "POST",
+      credentials: "include", // ✅
       body: formData,
-      headers: {},
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       ...options,
-    };
-
-    // Add auth token if available
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return fetch(`${this.baseURL}${endpoint}`, config).then((response) => {
-      if (!response.ok) {
-        throw new Error("Upload failed");
-      }
-      return response.json();
+    }).then((res) => {
+      if (!res.ok) throw new Error("Upload failed");
+      return res.json();
     });
   }
 }

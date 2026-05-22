@@ -3,267 +3,277 @@
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: relative;
-  overflow: hidden;
+  padding-top: 68px; /* navbar height */
 }
 
-.header {
-  background: rgba(255, 255, 255, 0.95);
+/* ── Navbar ── */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 68px;
+  background: rgba(255,255,255,0.97);
   backdrop-filter: blur(10px);
-  color: #333;
-  padding: 2rem 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
   border-bottom: 3px solid transparent;
   border-image: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   border-image-slice: 1;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
 }
 
-.container {
+.navInner {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+.navLogo {
+  font-size: 1.25rem;
+  font-weight: 800;
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.subtitle {
-  font-size: 1.125rem;
-  color: #64748b;
+.navLinks {
+  list-style: none;
+  display: flex;
+  gap: 1.75rem;
+  margin: 0;
+  padding: 0;
 }
 
-.main {
-  flex: 1;
-  padding: 2rem 0;
+.navLinks li {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: color 0.15s;
+  padding: 0.25rem 0;
+  position: relative;
+}
+.navLinks li:hover { color: #805ad5; }
+
+.navActive {
+  color: #805ad5 !important;
+}
+.navActive::after {
+  content: "";
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f093fb, #f5576c);
+  border-radius: 1px;
 }
 
-.form {
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  padding: 2rem;
+.navLogout { color: #ef4444 !important; }
+.navLogout:hover { color: #dc2626 !important; }
+
+/* ── Main ── */
+.main { flex: 1; padding: 2.5rem 0; }
+
+.container {
   max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── Form card ── */
+.form {
+  background: white;
+  border-radius: 1rem;
+  padding: 2.5rem;
   position: relative;
   overflow: hidden;
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  animation: fadeInUp 0.4s ease-out;
 }
-
 .form::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 5px;
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
 }
 
-.form:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.08);
+.formHeader { margin-bottom: 2rem; }
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 0.3rem;
 }
+.formSubtitle { font-size: 0.875rem; color: #64748b; margin: 0; }
 
-.formGroup {
-  margin-bottom: 1.5rem;
-}
+.errorText { color: #ef4444; font-size: 0.875rem; margin: 0 0 1rem; }
 
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
+.formGroup { margin-bottom: 1.5rem; }
 
 .label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #4a5568;
-  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+  color: #374151;
+  font-size: 0.875rem;
 }
 
 .input, .textarea, .select {
   width: 100%;
-  padding: 0.875rem;
+  padding: 0.8rem 1rem;
   border: 2px solid #e2e8f0;
   border-radius: 0.5rem;
   font-size: 1rem;
-  transition: all 0.2s ease-in-out;
+  color: #1e293b;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
+  background: white;
+  font-family: inherit;
 }
-
 .input:focus, .textarea:focus, .select:focus {
   outline: none;
   border-color: #805ad5;
-  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.2);
+  box-shadow: 0 0 0 3px rgba(128,90,213,0.15);
+}
+.textarea { resize: vertical; line-height: 1.6; }
+.select { cursor: pointer; appearance: auto; }
+
+/* Reward prefix */
+.inputPrefix { position: relative; }
+.prefix {
+  position: absolute;
+  left: 1rem; top: 50%;
+  transform: translateY(-50%);
+  font-weight: 700;
+  color: #64748b;
+  font-size: 1rem;
+  pointer-events: none;
+}
+.inputWithPrefix { padding-left: 1.75rem !important; }
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
 }
 
-.textarea {
-  resize: vertical;
-}
+/* ── Drop zone ── */
+.dropZone { margin-bottom: 0.75rem; }
+.fileInput { display: none; }
 
-.fileUpload {
-  margin-bottom: 1rem;
-}
-
-.fileInput {
-  display: none;
-}
-
-.fileLabel {
+.dropLabel {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 0.4rem;
   padding: 2rem;
-  border: 2px dashed #e2e8f0;
-  border-radius: 0.5rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.fileLabel:hover {
-  border-color: #805ad5;
-  background-color: #f3f0ff;
-}
-
-.fileLabel svg {
-  margin-bottom: 0.5rem;
   color: #805ad5;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
+.dropLabel:hover { border-color: #805ad5; background: #faf5ff; }
 
-.fileLabel span {
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.25rem;
-}
+.dropText { font-size: 0.9rem; font-weight: 600; color: #374151; }
+.dropHint { font-size: 0.78rem; color: #9ca3af; }
 
-.fileLabel p {
-  font-size: 0.875rem;
-  color: #64748b;
-}
-
-.fileList {
-  margin-top: 1rem;
-}
+.fileList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
 
 .fileItem {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0.75rem;
-  background-color: #f8fafc;
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
-  transition: all 0.2s ease-in-out;
-}
-
-.fileItem:hover {
-  background-color: #f3f0ff;
-}
-
-.fileName {
-  font-size: 0.875rem;
-  color: #374151;
-}
-
-.removeButton {
-  background: none;
-  border: none;
-  color: #f5576c;
-  cursor: pointer;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.25rem;
+  padding: 0.55rem 0.875rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+}
+.fileItem:hover { background: #f0f9ff; }
+
+.fileName { font-size: 0.875rem; color: #374151; font-weight: 500; word-break: break-all; }
+
+.removeBtn {
+  background: none; border: none;
+  color: #f5576c; cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
-  transition: all 0.15s ease-in-out;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+  transition: background 0.15s;
 }
+.removeBtn:hover { background: #fee2e2; }
 
-.removeButton:hover {
-  background-color: #fee2e2;
-}
-
+/* ── Form actions ── */
 .formActions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 
-.cancelButton {
-  background-color: transparent;
-  color: #718096;
+.cancelBtn {
+  background: transparent;
+  color: #64748b;
   border: 2px solid #e2e8f0;
   border-radius: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease;
 }
+.cancelBtn:hover { background: #f8fafc; border-color: #cbd5e0; color: #374151; }
 
-.cancelButton:hover {
-  background-color: #f7fafc;
-  border-color: #cbd5e0;
-  color: #4a5568;
-}
-
-.submitButton {
+.submitBtn {
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   color: white;
   border: none;
   border-radius: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(245,87,108,0.3);
 }
+.submitBtn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(245,87,108,0.4); }
 
-.submitButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+/* ── Success ── */
+.successWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1rem;
+  padding: 2rem;
 }
-
-/* Add a subtle animation to the form */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.form {
-  animation: fadeInUp 0.5s ease-out;
-}
-
-/* Add some decorative elements */
-.postProblem::after {
-  content: "";
-  position: absolute;
-  bottom: -100px;
-  right: -100px;
-  width: 200px;
-  height: 200px;
+.successIcon {
+  width: 80px; height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  opacity: 0.1;
-  z-index: -1;
+  background: linear-gradient(135deg, #d1fae5, #6ee7b7);
+  color: #059669;
+  font-size: 2.5rem;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(16,185,129,0.3);
+}
+.successTitle { font-size: 1.75rem; font-weight: 800; color: white; margin: 0; }
+.successMsg   { font-size: 1rem; color: rgba(255,255,255,0.8); margin: 0; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 768px) {
-  .formRow {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 640px) {
+  .formRow { grid-template-columns: 1fr; }
+  .formActions { flex-direction: column-reverse; }
+  .cancelBtn, .submitBtn { width: 100%; text-align: center; }
+  .navLinks { gap: 1rem; }
+  .navLinks li { font-size: 0.78rem; }
 }

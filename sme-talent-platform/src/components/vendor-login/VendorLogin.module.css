@@ -1,25 +1,49 @@
+/* Shared by all login/signup screens */
 .loginContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 1.5rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
   overflow: hidden;
 }
 
+.loginContainer::before,
+.loginContainer::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+  z-index: 0;
+}
+.loginContainer::before {
+  width: 280px;
+  height: 280px;
+  top: -80px;
+  left: -80px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+.loginContainer::after {
+  width: 200px;
+  height: 200px;
+  bottom: -60px;
+  right: -60px;
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
 .loginCard {
-  background-color: white;
+  background: white;
   border-radius: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   padding: 2.5rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   position: relative;
   z-index: 1;
   overflow: hidden;
+  animation: fadeInUp 0.45s ease-out both;
 }
 
 .loginCard::before {
@@ -33,53 +57,64 @@
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.875rem;
+  font-weight: 800;
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
+  background-clip: text;
+  margin-bottom: 0.4rem;
   text-align: center;
 }
 
 .subtitle {
   color: #64748b;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
   text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
+/* ─── Form ─── */
 .form {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .formGroup {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   font-weight: 600;
-  color: #4a5568;
-  font-size: 0.9rem;
+  color: #374151;
+  font-size: 0.875rem;
 }
 
 .input {
   width: 100%;
-  padding: 0.875rem;
+  padding: 0.8rem 1rem;
   border: 2px solid #e2e8f0;
   border-radius: 0.5rem;
   font-size: 1rem;
-  transition: all 0.2s ease-in-out;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
+  color: #1e293b;
 }
 
 .input:focus {
   outline: none;
   border-color: #805ad5;
-  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.2);
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.18);
 }
 
+.forgotPassword {
+  text-align: right;
+  margin-top: 0.4rem;
+}
+
+/* ─── Buttons ─── */
 .loginButton {
   width: 100%;
   background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
@@ -88,139 +123,95 @@
   border-radius: 0.5rem;
   padding: 0.875rem;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  margin-top: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(245, 87, 108, 0.35);
+  margin-top: 0.25rem;
 }
 
 .loginButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
 }
 
 .loginButton:active {
   transform: translateY(0);
 }
 
-.footer {
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
-}
-
-.link {
-  color: #805ad5;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.2s ease-in-out;
-}
-
-.link:hover {
-  color: #f5576c;
-  text-decoration: underline;
-}
-
-.backButton {
-  width: 100%;
-  background-color: transparent;
-  color: #718096;
-  border: 2px solid #e2e8f0;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.backButton:hover {
-  background-color: #f7fafc;
-  border-color: #cbd5e0;
-  color: #4a5568;
-}
-
-/* Add a subtle animation to the card */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.loginCard {
-  animation: fadeInUp 0.5s ease-out;
-}
-
-/* Add some decorative elements */
-.loginContainer::after {
-  content: "";
-  position: absolute;
-  bottom: -50px;
-  right: -50px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  opacity: 0.1;
-  z-index: -1;
-}
-
+/* ─── Social ─── */
 .socialLogin {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
 }
 
 .socialButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   width: 100%;
   padding: 0.75rem;
   border: 2px solid #e2e8f0;
   border-radius: 0.5rem;
   background: white;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .socialButton:hover {
-  border-color: #cbd5e0;
-  background: #f7fafc;
+  border-color: #a78bfa;
+  background: #faf5ff;
 }
 
+/* ─── Divider ─── */
 .divider {
   display: flex;
   align-items: center;
-  margin: 1.5rem 0;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
 }
 
 .dividerText {
-  background: white;
-  padding: 0 1rem;
-  color: #718096;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ─── Footer / links ─── */
+.footer {
+  margin-bottom: 1rem;
   font-size: 0.875rem;
+}
+
+.centerText {
+  text-align: center;
+  color: #64748b;
 }
 
 .linkButton {
   background: none;
   border: none;
   color: #805ad5;
-  font-weight: 500;
-  text-decoration: none;
+  font-weight: 600;
   cursor: pointer;
-  transition: color 0.2s ease-in-out;
+  padding: 0;
+  font-size: inherit;
+  transition: color 0.15s ease;
 }
 
 .linkButton:hover {
@@ -228,11 +219,26 @@
   text-decoration: underline;
 }
 
-.forgotPassword {
-  text-align: right;
-  margin-top: 0.5rem;
+.backButton {
+  width: 100%;
+  background: transparent;
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.centerText {
-  text-align: center;
+.backButton:hover {
+  background: #f8fafc;
+  border-color: #cbd5e0;
+  color: #374151;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

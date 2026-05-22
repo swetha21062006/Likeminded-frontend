@@ -1,90 +1,120 @@
-import { api } from "./api";
 import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "../firebase";
+import { api } from "./api";
 
+// ─── OAuth helpers ────────────────────────────────────────────────────────────
+export const signInWithGoogle = async () => {
+  const result = await signInWithPopup(auth, googleProvider);
+  return result.user;
+};
+
+export const signInWithGithub = async () => {
+  const result = await signInWithPopup(auth, githubProvider);
+  return result.user;
+};
+
+// ─── Token helpers ────────────────────────────────────────────────────────────
+const saveSession = (token, user, remember = false) => {
+  const storage = remember ? localStorage : sessionStorage;
+  storage.setItem("token", token);
+  storage.setItem("user", JSON.stringify(user));
+  // always keep in localStorage so api.js picks it up via Bearer header
+  localStorage.setItem("token", token);
+};
+
+const clearSession = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("user");
+};
+
+const getStoredUser = () => {
+  try {
+    const raw = localStorage.getItem("user") || sessionStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+// ─── AuthService ──────────────────────────────────────────────────────────────
 class AuthService {
-  async login(email, password, userType) {
+  // Register new user
+  async register(userData) {
+    const response = await api.post("/auth/register", userData);
+    if (response.token) {
+      saveSession(response.token, response.user, true);
+    }
+    return response.user;
+  }
+
+  // Login with email + password
+  async login(email, password, userType, remember = false) {
     const response = await api.post("/auth/login", {
       email,
       password,
       userType,
     });
-
     if (response.token) {
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      saveSession(response.token, response.user, remember);
     }
-
     return response.user;
   }
 
-  async register(userData) {
-    const response = await api.post("/auth/register", userData);
-
-    if (response.token) {
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
-    }
-
-    return response.user;
-  }
-
+  // Logout — clears token + Firebase session
   async logout() {
     try {
       await signOut(auth);
       await api.post("/auth/logout");
     } finally {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("profile");
+      clearSession();
     }
   }
 
+  // Verify token with backend and return user
   async getCurrentUser() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return null;
-    }
-
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (!token) return null;
     try {
-      const user = await api.get("/auth/me");
-      return user;
-    } catch (error) {
-      // Token is invalid, remove it
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      const response = await api.get("/auth/me");
+      return response.user;
+    } catch {
+      clearSession();
       return null;
     }
   }
 
   isAuthenticated() {
-    return !!localStorage.getItem("token");
+    return !!localStorage.getItem("token") || !!sessionStorage.getItem("token");
+  }
+
+  getStoredUser() {
+    return getStoredUser();
   }
 
   getUserType() {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    return user.type;
+    const user = getStoredUser();
+    return user?.userType || null;
   }
 
-  // Get Firebase authenticated user
   getFirebaseAuthStateListener(callback) {
     return onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        const userProfile = {
+        callback({
           uid: firebaseUser.uid,
           email: firebaseUser.email,
           displayName: firebaseUser.displayName || "",
           photoURL: firebaseUser.photoURL || "",
           loginProvider: firebaseUser.providerData[0]?.providerId || "email",
-        };
-        callback(userProfile);
+        });
       } else {
         callback(null);
       }
     });
   }
 
-  // Profile management
   saveProfile(profile) {
     localStorage.setItem("profile", JSON.stringify(profile));
     return profile;
@@ -96,21 +126,9 @@ class AuthService {
   }
 
   updateProfile(updates) {
-    const currentProfile = this.getProfile() || {};
-    const updatedProfile = { ...currentProfile, ...updates };
-    return this.saveProfile(updatedProfile);
+    const current = this.getProfile() || {};
+    return this.saveProfile({ ...current, ...updates });
   }
 }
-// Google sign-in (frontend only)
-export const signInWithGoogle = async () => {
-  const result = await signInWithPopup(auth, googleProvider);
-  return result.user;
-};
-
-// GitHub sign-in (frontend only)
-export const signInWithGithub = async () => {
-  const result = await signInWithPopup(auth, githubProvider);
-  return result.user;
-};
 
 export const authService = new AuthService();

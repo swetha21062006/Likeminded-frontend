@@ -5,6 +5,7 @@ const SubmissionScreen = ({ onNavigate, selectedProblem }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -17,50 +18,84 @@ const SubmissionScreen = ({ onNavigate, selectedProblem }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, this would submit the solution
-    console.log("Submitting solution:", {
+    console.log("Submitting:", {
       title,
       description,
       files,
       problem: selectedProblem,
     });
-    onNavigate("user-dashboard");
+    setSubmitted(true);
+    setTimeout(() => onNavigate("user-dashboard"), 2000);
   };
 
+  if (submitted) {
+    return (
+      <div className={styles.screen}>
+        <div className={styles.successWrap}>
+          <div className={styles.successIcon}>✓</div>
+          <h2 className={styles.successTitle}>Solution Submitted!</h2>
+          <p className={styles.successMsg}>Redirecting to dashboard…</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.submissionScreen}>
+    <div className={styles.screen}>
       <header className={styles.header}>
         <div className={styles.container}>
           <h1 className={styles.title}>Submit Solution</h1>
           <p className={styles.subtitle}>
-            Provide your solution for: {selectedProblem?.title}
+            {selectedProblem?.title
+              ? `For: ${selectedProblem.title}`
+              : "Select a problem from the dashboard"}
           </p>
         </div>
       </header>
 
       <main className={styles.main}>
         <div className={styles.container}>
-          <div className={styles.problemInfo}>
-            <h2 className={styles.problemTitle}>{selectedProblem?.title}</h2>
-            <p className={styles.problemDescription}>
-              {selectedProblem?.description}
-            </p>
-            <div className={styles.problemDetails}>
-              <div className={styles.problemDetail}>
-                <span className={styles.detailLabel}>Deadline:</span>
-                <span className={styles.detailValue}>
-                  {selectedProblem?.deadline}
-                </span>
-              </div>
-              <div className={styles.problemDetail}>
-                <span className={styles.detailLabel}>Reward:</span>
-                <span className={styles.detailValue}>
-                  {selectedProblem?.reward}
-                </span>
+          {/* Problem summary */}
+          {selectedProblem && (
+            <div className={styles.problemInfo}>
+              <h2 className={styles.problemTitle}>{selectedProblem.title}</h2>
+              {selectedProblem.description && (
+                <p className={styles.problemDesc}>
+                  {selectedProblem.description}
+                </p>
+              )}
+              <div className={styles.metaRow}>
+                {selectedProblem.deadline && (
+                  <div className={styles.metaItem}>
+                    <span className={styles.metaLabel}>Deadline</span>
+                    <span className={styles.metaValue}>
+                      {selectedProblem.deadline}
+                    </span>
+                  </div>
+                )}
+                {selectedProblem.reward && (
+                  <div className={styles.metaItem}>
+                    <span className={styles.metaLabel}>Reward</span>
+                    <span className={styles.metaValue}>
+                      {selectedProblem.reward}
+                    </span>
+                  </div>
+                )}
+                {selectedProblem.difficulty && (
+                  <div className={styles.metaItem}>
+                    <span className={styles.metaLabel}>Difficulty</span>
+                    <span
+                      className={`${styles.badge} ${styles[selectedProblem.difficulty.toLowerCase()]}`}
+                    >
+                      {selectedProblem.difficulty}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
+          )}
 
+          {/* Form */}
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               <label htmlFor="title" className={styles.label}>
@@ -72,6 +107,7 @@ const SubmissionScreen = ({ onNavigate, selectedProblem }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className={styles.input}
+                placeholder="Give your solution a clear title"
                 required
               />
             </div>
@@ -85,16 +121,15 @@ const SubmissionScreen = ({ onNavigate, selectedProblem }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className={styles.textarea}
-                rows={6}
+                rows={7}
+                placeholder="Describe your solution in detail. Include your approach, methodology, and expected outcomes…"
                 required
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="files" className={styles.label}>
-                Attachments
-              </label>
-              <div className={styles.fileUpload}>
+              <label className={styles.label}>Attachments</label>
+              <div className={styles.dropZone}>
                 <input
                   type="file"
                   id="files"
@@ -102,67 +137,55 @@ const SubmissionScreen = ({ onNavigate, selectedProblem }) => {
                   className={styles.fileInput}
                   multiple
                 />
-                <label htmlFor="files" className={styles.fileLabel}>
+                <label htmlFor="files" className={styles.dropLabel}>
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="32"
+                    height="32"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    strokeWidth="1.5"
                   >
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
-                  <span>Click to upload or drag and drop</span>
-                  <p>PNG, JPG, PDF up to 10MB</p>
+                  <span className={styles.dropText}>
+                    Click to upload or drag &amp; drop
+                  </span>
+                  <span className={styles.dropHint}>
+                    PNG, JPG, PDF, DOCX up to 10 MB
+                  </span>
                 </label>
               </div>
 
               {files.length > 0 && (
-                <div className={styles.fileList}>
-                  {files.map((file, index) => (
-                    <div key={index} className={styles.fileItem}>
+                <ul className={styles.fileList}>
+                  {files.map((file, i) => (
+                    <li key={i} className={styles.fileItem}>
                       <span className={styles.fileName}>{file.name}</span>
                       <button
                         type="button"
-                        className={styles.removeButton}
-                        onClick={() => removeFile(index)}
+                        className={styles.removeBtn}
+                        onClick={() => removeFile(i)}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <line x1="18" y1="6" x2="6" y2="18"></line>
-                          <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
+                        ✕
                       </button>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
 
             <div className={styles.formActions}>
               <button
                 type="button"
-                className={styles.cancelButton}
+                className={styles.cancelBtn}
                 onClick={() => onNavigate("user-dashboard")}
               >
                 Cancel
               </button>
-              <button type="submit" className={styles.submitButton}>
+              <button type="submit" className={styles.submitBtn}>
                 Submit Solution
               </button>
             </div>
